@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Tennis Live Scores";
+}
+
+<div class="text-center">
+    <h1 class="display-4">🎾 Tennis Live Scores</h1>
+    <p class="lead">Follow live tennis matches and upcoming games in real-time</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">📺 Live Matches</h5>
+            </div>
+            <div class="card-body">
+                <p>Watch live tennis matches as they happen</p>
+                <a href="@Url.Action("Live", "Tennis")" class="btn btn-success">View Live Matches</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">⏰ Upcoming Matches</h5>
+            </div>
+            <div class="card-body">
+                <p>See what's coming up in the tennis world</p>
+                <a href="@Url.Action("Upcoming", "Tennis")" class="btn btn-primary">View Upcoming Matches</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">🏆 All Matches</h5>
+            </div>
+            <div class="card-body">
+                <p>Get a complete overview of all tennis matches</p>
+                <a href="@Url.Action("Index", "Tennis")" class="btn btn-info">View All Matches</a>
+            </div>
+        </div>
+    </div>
+</div>

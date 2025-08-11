@@ -1,0 +1,236 @@
+@model TennisBets.Models.TennisMatch
+@{
+    ViewData["Title"] = $"Match Details - {Model.EventFirstPlayer} vs {Model.EventSecondPlayer}";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>🎾 Match Details</h1>
+                <div>
+                    <a href="@Url.Action("Index", "Tennis")" class="btn btn-outline-primary">← Back to All Matches</a>
+                    @if (Model.IsLive)
+                    {
+                        <button id="refreshBtn" class="btn btn-success ms-2">
+                            <i class="fas fa-sync-alt"></i> Refresh Live
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Match Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header @(Model.IsLive ? "bg-success" : "bg-primary") text-white">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="mb-0">@Model.TournamentName</h4>
+                            <small>@Model.TournamentRound - @Model.EventTypeType (@Model.TournamentSeason)</small>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            @if (Model.IsLive)
+                            {
+                                <span class="badge bg-light text-dark fs-6">LIVE</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-light text-dark fs-6">@Model.MatchTime</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 text-center">
+                            @if (!string.IsNullOrEmpty(Model.EventFirstPlayerLogo))
+                            {
+                                <img src="@Model.EventFirstPlayerLogo" alt="@Model.EventFirstPlayer" class="img-fluid rounded-circle mb-2" style="width: 100px; height: 100px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mb-2 mx-auto" style="width: 100px; height: 100px;">
+                                    <i class="fas fa-user fa-3x text-white"></i>
+                                </div>
+                            }
+                            <h5 class="mb-0">@Model.EventFirstPlayer</h5>
+                            <small class="text-muted">Player 1</small>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h2 class="text-primary mb-2">VS</h2>
+                            @if (Model.IsLive)
+                            {
+                                <div class="mb-2">
+                                    <span class="badge bg-success fs-6">@Model.EventStatus</span>
+                                </div>
+                                <div class="mb-2">
+                                    <strong>Serve:</strong> @Model.EventServe
+                                </div>
+                            }
+                            <div class="mb-2">
+                                <strong>Current Score:</strong> @Model.CurrentScore
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            @if (!string.IsNullOrEmpty(Model.EventSecondPlayerLogo))
+                            {
+                                <img src="@Model.EventSecondPlayerLogo" alt="@Model.EventSecondPlayer" class="img-fluid rounded-circle mb-2" style="width: 100px; height: 100px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mb-2 mx-auto" style="width: 100px; height: 100px;">
+                                    <i class="fas fa-user fa-3x text-white"></i>
+                                </div>
+                            }
+                            <h5 class="mb-0">@Model.EventSecondPlayer</h5>
+                            <small class="text-muted">Player 2</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Set Scores -->
+    @if (Model.Scores.Any())
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">📊 Set Scores</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            @foreach (var score in Model.Scores)
+                            {
+                                <div class="col-md-2 col-sm-4 col-6 mb-2">
+                                    <div class="border rounded p-2">
+                                        <small class="text-muted">Set @score.ScoreSet</small>
+                                        <div class="h5 mb-0">@score.ScoreFirst - @score.ScoreSecond</div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Point by Point -->
+    @if (Model.PointByPoint.Any())
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">🎯 Point by Point Analysis</h5>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var game in Model.PointByPoint)
+                        {
+                            <div class="mb-3 p-3 border rounded">
+                                <h6 class="text-primary">@game.SetNumber - Game @game.NumberGame</h6>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <strong>Serve:</strong> @game.PlayerServed
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Score:</strong> @game.Score
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Winner:</strong> @(game.ServeWinner ?? "N/A")
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Lost:</strong> @(game.ServeLost ?? "N/A")
+                                    </div>
+                                </div>
+                                @if (game.Points.Any())
+                                {
+                                    <div class="mt-2">
+                                        <small class="text-muted">Points:</small>
+                                        <div class="d-flex flex-wrap gap-1 mt-1">
+                                            @foreach (var point in game.Points.Take(10))
+                                            {
+                                                <span class="badge bg-secondary">@point.Score</span>
+                                            }
+                                            @if (game.Points.Count > 10)
+                                            {
+                                                <span class="badge bg-secondary">+@(game.Points.Count - 10) more</span>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Statistics -->
+    @if (Model.Statistics.Any())
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">📈 Match Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @{
+                                var firstPlayerStats = Model.Statistics.Where(s => s.PlayerKey == Model.FirstPlayerKey && s.StatPeriod == "match").ToList();
+                                var secondPlayerStats = Model.Statistics.Where(s => s.PlayerKey == Model.SecondPlayerKey && s.StatPeriod == "match").ToList();
+                            }
+                            
+                            <div class="col-md-6">
+                                <h6 class="text-primary">@Model.EventFirstPlayer</h6>
+                                @foreach (var stat in firstPlayerStats.Take(8))
+                                {
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>@stat.StatName:</span>
+                                        <strong>@stat.StatValue</strong>
+                                    </div>
+                                }
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 class="text-primary">@Model.EventSecondPlayer</h6>
+                                @foreach (var stat in secondPlayerStats.Take(8))
+                                {
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>@stat.StatName:</span>
+                                        <strong>@stat.StatValue</strong>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @if (Model.IsLive)
+    {
+        <script>
+            // Auto-refresh every 30 seconds for live matches
+            setInterval(function() {
+                location.reload();
+            }, 30000);
+
+            // Manual refresh button
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                location.reload();
+            });
+        </script>
+    }
+}

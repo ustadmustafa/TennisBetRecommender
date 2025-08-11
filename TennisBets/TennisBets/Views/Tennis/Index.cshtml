@@ -1,0 +1,104 @@
+@model TennisBets.Controllers.TennisMatchesViewModel
+@{
+    ViewData["Title"] = "Tennis Matches";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">🎾 Tennis Matches</h1>
+        </div>
+    </div>
+
+    <!-- Live Matches Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">📺 Live Matches (@Model.LiveMatches.Count)</h5>
+                    <span class="badge bg-light text-dark">LIVE</span>
+                </div>
+                <div class="card-body">
+                    @if (Model.LiveMatches.Any())
+                    {
+                        <div class="row">
+                            @foreach (var match in Model.LiveMatches)
+                            {
+                                <div class="col-md-6 col-lg-4 mb-3">
+                                    <div class="card h-100 border-success">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <small class="text-muted">@match.TournamentName</small>
+                                                <span class="badge bg-success">LIVE</span>
+                                            </div>
+                                            <h6 class="card-title">@match.EventFirstPlayer vs @match.EventSecondPlayer</h6>
+                                            <p class="card-text">
+                                                <strong>Status:</strong> @match.EventStatus<br>
+                                                <strong>Score:</strong> @match.CurrentScore<br>
+                                                <strong>Set Score:</strong> @match.SetScore<br>
+                                                <strong>Serve:</strong> @match.EventServe
+                                            </p>
+                                            <a href="@Url.Action("Details", "Tennis", new { id = match.EventKey })" class="btn btn-outline-success btn-sm">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">No live matches at the moment.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Matches Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">⏰ Upcoming Matches (@Model.UpcomingMatches.Count)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.UpcomingMatches.Any())
+                    {
+                        <div class="row">
+                            @foreach (var match in Model.UpcomingMatches.Take(6))
+                            {
+                                <div class="col-md-6 col-lg-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <small class="text-muted">@match.TournamentName</small>
+                                                <small class="text-primary">@match.MatchTime</small>
+                                            </div>
+                                            <h6 class="card-title">@match.EventFirstPlayer vs @match.EventSecondPlayer</h6>
+                                            <p class="card-text">
+                                                <strong>Round:</strong> @match.TournamentRound<br>
+                                                <strong>Type:</strong> @match.EventTypeType<br>
+                                                <strong>Season:</strong> @match.TournamentSeason
+                                            </p>
+                                            <a href="@Url.Action("Details", "Tennis", new { id = match.EventKey })" class="btn btn-outline-primary btn-sm">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @if (Model.UpcomingMatches.Count > 6)
+                        {
+                            <div class="text-center mt-3">
+                                <a href="@Url.Action("Upcoming", "Tennis")" class="btn btn-primary">View All Upcoming Matches</a>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">No upcoming matches scheduled.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
