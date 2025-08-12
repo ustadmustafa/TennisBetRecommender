@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8W5tsl3LnV0=",
+  "dgSpecHash": "BfN+0AoH4cY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\mustafa.albayrak\\Desktop\\Besttennisbets\\TennisBets\\TennisBets\\TennisBets.csproj",
+  "projectFilePath": "C:\\Users\\mustafa.albayrak\\Desktop\\TennisStandingsPlayersH2H\\TennisBetRecommender\\TennisBets\\TennisBets\\TennisBets.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mustafa.albayrak\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.22.1\\microsoft.visualstudio.azure.containers.tools.targets.1.22.1.nupkg.sha512"
   ],

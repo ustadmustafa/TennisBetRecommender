@@ -38,7 +38,17 @@
                                                 <strong>Set Score:</strong> @match.SetScore<br>
                                                 <strong>Serve:</strong> @match.EventServe
                                             </p>
-                                            <a href="@Url.Action("Details", "Tennis", new { id = match.EventKey })" class="btn btn-outline-success btn-sm">View Details</a>
+                                            <div class="d-flex gap-2">
+                                                <a href="@Url.Action("Details", "Tennis", new { id = match.EventKey })" class="btn btn-outline-success btn-sm">View Details</a>
+                                                <button class="btn btn-outline-warning btn-sm betting-predictions-btn" 
+                                                        data-player1="@match.FirstPlayerKey" 
+                                                        data-player2="@match.SecondPlayerKey"
+                                                        data-match-id="@match.EventKey"
+                                                        data-player1-name="@match.EventFirstPlayer"
+                                                        data-player2-name="@match.EventSecondPlayer">
+                                                    🎯 Betting Tips
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -80,7 +90,17 @@
                                                 <strong>Type:</strong> @match.EventTypeType<br>
                                                 <strong>Season:</strong> @match.TournamentSeason
                                             </p>
-                                            <a href="@Url.Action("Details", "Tennis", new { id = match.EventKey })" class="btn btn-outline-primary btn-sm">View Details</a>
+                                            <div class="d-flex gap-2">
+                                                <a href="@Url.Action("Details", "Tennis", new { id = match.EventKey })" class="btn btn-outline-primary btn-sm">View Details</a>
+                                                <button class="btn btn-outline-warning btn-sm betting-predictions-btn" 
+                                                        data-player1="@match.FirstPlayerKey" 
+                                                        data-player2="@match.SecondPlayerKey"
+                                                        data-match-id="@match.EventKey"
+                                                        data-player1-name="@match.EventFirstPlayer"
+                                                        data-player2-name="@match.EventSecondPlayer">
+                                                    🎯 Betting Tips
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -102,3 +122,157 @@
         </div>
     </div>
 </div>
+
+<!-- Betting Predictions Modal -->
+<div class="modal fade" id="bettingPredictionsModal" tabindex="-1" aria-labelledby="bettingPredictionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bettingPredictionsModalLabel">🎯 Betting Predictions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="bettingPredictionsContent">
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Analyzing match data...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.betting-predictions-btn').click(function() {
+                const player1Key = $(this).data('player1');
+                const player2Key = $(this).data('player2');
+                const matchId = $(this).data('match-id');
+                const player1Name = $(this).data('player1-name');
+                const player2Name = $(this).data('player2-name');
+                
+                $('#bettingPredictionsModal').modal('show');
+                loadBettingPredictions(player1Key, player2Key, matchId, player1Name, player2Name);
+            });
+
+            function loadBettingPredictions(player1Key, player2Key, matchId, player1Name, player2Name) {
+                // Loading göster
+                $('#bettingPredictionsContent').html(`
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing match data for ${player1Name} vs ${player2Name}...</p>
+                    </div>
+                `);
+                
+                $.ajax({
+                    url: '@Url.Action("GetBettingPredictions", "Tennis")',
+                    type: 'GET',
+                    data: { player1Key: player1Key, player2Key: player2Key },
+                    success: function(response) {
+                        console.log('API Response:', response);
+                        if (response.success) {
+                            // Oyuncu isimlerini set et
+                            response.data.player1Name = player1Name;
+                            response.data.player2Name = player2Name;
+                            response.data.matchId = matchId;
+                            console.log('Processed data:', response.data);
+                            displayBettingPredictions(response.data);
+                        } else {
+                            console.error('API returned error:', response.message);
+                            $('#bettingPredictionsContent').html('<div class="alert alert-danger">Error loading predictions: ' + response.message + '</div>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', {xhr: xhr, status: status, error: error});
+                        $('#bettingPredictionsContent').html(`
+                            <div class="alert alert-danger">
+                                <h6>Error loading predictions:</h6>
+                                <p><strong>Status:</strong> ${status}</p>
+                                <p><strong>Error:</strong> ${error}</p>
+                                <p><strong>Response:</strong> ${xhr.responseText}</p>
+                            </div>
+                        `);
+                    }
+                });
+            }
+
+            function displayBettingPredictions(predictions) {
+                let html = `
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <h6 class="text-primary">${predictions.player1Name} vs ${predictions.player2Name}</h6>
+                            <p class="text-muted mb-0">Overall Confidence: <strong>${(predictions.overallConfidence * 100).toFixed(1)}%</strong></p>
+                            <small class="text-muted">Prediction Date: ${new Date(predictions.predictionDate).toLocaleString()}</small>
+                        </div>
+                    </div>
+                    <hr>
+                `;
+
+                predictions.predictions.forEach(function(prediction) {
+                    const confidencePercent = (prediction.confidence * 100).toFixed(1);
+                    const recommendationClass = getRecommendationClass(prediction.recommendation);
+                    const recommendationText = getRecommendationText(prediction.recommendation);
+                    
+                    html += `
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="card border-${recommendationClass}">
+                                    <div class="card-header bg-${recommendationClass} text-white">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-0">${prediction.betType}</h6>
+                                            <span class="badge bg-light text-dark">${recommendationText}</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>Prediction:</strong> ${prediction.prediction}</p>
+                                                <p class="mb-1"><strong>Confidence:</strong> <span class="text-${recommendationClass}">${confidencePercent}%</span></p>
+                                                <p class="mb-1"><strong>Recommended Odds:</strong> ${prediction.recommendedOdds.toFixed(2)}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>Reasoning:</strong></p>
+                                                <p class="text-muted small">${prediction.reasoning}</p>
+                                                <p class="mb-0"><strong>Data Sources:</strong></p>
+                                                <p class="text-muted small">${prediction.dataSources.join(', ')}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                $('#bettingPredictionsContent').html(html);
+            }
+
+            function getRecommendationClass(recommendation) {
+                switch(recommendation) {
+                    case 'StrongBet': return 'success';
+                    case 'ModerateBet': return 'warning';
+                    case 'WeakBet': return 'info';
+                    case 'AvoidBet': return 'danger';
+                    default: return 'secondary';
+                }
+            }
+
+            function getRecommendationText(recommendation) {
+                switch(recommendation) {
+                    case 'StrongBet': return 'Strong Bet';
+                    case 'ModerateBet': return 'Moderate Bet';
+                    case 'WeakBet': return 'Weak Bet';
+                    case 'AvoidBet': return 'Avoid Bet';
+                    default: return 'Unknown';
+                }
+            }
+        });
+    </script>
+}

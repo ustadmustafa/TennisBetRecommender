@@ -11,6 +11,12 @@ builder.Services.AddHttpClient();
 // Add Tennis Service
 builder.Services.AddScoped<ITennisService, TennisService>();
 
+// Add Tennis API Service
+builder.Services.AddScoped<ITennisApiService, TennisApiService>();
+
+// Add Betting Prediction Service
+builder.Services.AddScoped<IBettingPredictionService, BettingPredictionService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
