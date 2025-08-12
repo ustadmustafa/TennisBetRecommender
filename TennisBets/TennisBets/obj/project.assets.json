@@ -105,11 +105,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mustafa.albayrak\\Desktop\\TennisStandingsPlayersH2H\\TennisBetRecommender\\TennisBets\\TennisBets\\TennisBets.csproj",
+      "projectUniqueName": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\TennisBets.csproj",
       "projectName": "TennisBets",
-      "projectPath": "C:\\Users\\mustafa.albayrak\\Desktop\\TennisStandingsPlayersH2H\\TennisBetRecommender\\TennisBets\\TennisBets\\TennisBets.csproj",
+      "projectPath": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\TennisBets.csproj",
       "packagesPath": "C:\\Users\\mustafa.albayrak\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mustafa.albayrak\\Desktop\\TennisStandingsPlayersH2H\\TennisBetRecommender\\TennisBets\\TennisBets\\obj\\",
+      "outputPath": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

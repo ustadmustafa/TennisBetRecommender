@@ -48,6 +48,14 @@
                                                         data-player2-name="@match.EventSecondPlayer">
                                                     🎯 Betting Tips
                                                 </button>
+                                                <button class="btn btn-outline-info btn-sm player-analysis-btn" 
+                                                        data-player1="@match.FirstPlayerKey" 
+                                                        data-player2="@match.SecondPlayerKey"
+                                                        data-match-id="@match.EventKey"
+                                                        data-player1-name="@match.EventFirstPlayer"
+                                                        data-player2-name="@match.EventSecondPlayer">
+                                                    📊 Player Analysis
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -100,6 +108,14 @@
                                                         data-player2-name="@match.EventSecondPlayer">
                                                     🎯 Betting Tips
                                                 </button>
+                                                <button class="btn btn-outline-info btn-sm player-analysis-btn" 
+                                                        data-player1="@match.FirstPlayerKey" 
+                                                        data-player2="@match.SecondPlayerKey"
+                                                        data-match-id="@match.EventKey"
+                                                        data-player1-name="@match.EventFirstPlayer"
+                                                        data-player2-name="@match.EventSecondPlayer">
+                                                    📊 Player Analysis
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -146,6 +162,29 @@
     </div>
 </div>
 
+<!-- Player Analysis Modal -->
+<div class="modal fade" id="playerAnalysisModal" tabindex="-1" aria-labelledby="playerAnalysisModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="playerAnalysisModalLabel">📊 Player Analysis</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="playerAnalysisContent">
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Analyzing player statistics...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
         $(document).ready(function() {
@@ -158,6 +197,17 @@
                 
                 $('#bettingPredictionsModal').modal('show');
                 loadBettingPredictions(player1Key, player2Key, matchId, player1Name, player2Name);
+            });
+
+            $('.player-analysis-btn').click(function() {
+                const player1Key = $(this).data('player1');
+                const player2Key = $(this).data('player2');
+                const matchId = $(this).data('match-id');
+                const player1Name = $(this).data('player1-name');
+                const player2Name = $(this).data('player2-name');
+                
+                $('#playerAnalysisModal').modal('show');
+                loadPlayerAnalysis(player1Key, player2Key, matchId, player1Name, player2Name);
             });
 
             function loadBettingPredictions(player1Key, player2Key, matchId, player1Name, player2Name) {
@@ -272,6 +322,138 @@
                     case 'AvoidBet': return 'Avoid Bet';
                     default: return 'Unknown';
                 }
+            }
+
+            function loadPlayerAnalysis(player1Key, player2Key, matchId, player1Name, player2Name) {
+                // Loading göster
+                $('#playerAnalysisContent').html(`
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing player statistics for ${player1Name} vs ${player2Name}...</p>
+                    </div>
+                `);
+                
+                $.ajax({
+                    url: '@Url.Action("GetPlayerAnalysis", "Tennis")',
+                    type: 'GET',
+                    data: { player1Key: player1Key, player2Key: player2Key },
+                    success: function(response) {
+                        console.log('Player Analysis API Response:', response);
+                        if (response.success) {
+                            response.data.player1Name = player1Name;
+                            response.data.player2Name = player2Name;
+                            response.data.matchId = matchId;
+                            displayPlayerAnalysis(response.data);
+                        } else {
+                            console.error('API returned error:', response.message);
+                            $('#playerAnalysisContent').html('<div class="alert alert-danger">Error loading analysis: ' + response.message + '</div>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', {xhr: xhr, status: status, error: error});
+                        $('#playerAnalysisContent').html(`
+                            <div class="alert alert-danger">
+                                <h6>Error loading analysis:</h6>
+                                <p><strong>Status:</strong> ${status}</p>
+                                <p><strong>Error:</strong> ${error}</p>
+                                <p><strong>Response:</strong> ${xhr.responseText}</p>
+                            </div>
+                        `);
+                    }
+                });
+            }
+
+            function displayPlayerAnalysis(analysis) {
+                let html = `
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <h6 class="text-primary">${analysis.player1Name} vs ${analysis.player2Name}</h6>
+                            <small class="text-muted">Analysis Date: ${analysis.analysisDate}</small>
+                        </div>
+                    </div>
+                    <hr>
+                `;
+
+                // Player 1 Analysis
+                html += createPlayerAnalysisCard(analysis.player1, 1);
+                
+                // Player 2 Analysis
+                html += createPlayerAnalysisCard(analysis.player2, 2);
+
+                $('#playerAnalysisContent').html(html);
+            }
+
+            function createPlayerAnalysisCard(player, playerNumber) {
+                const playerName = playerNumber === 1 ? 'player1Name' : 'player2Name';
+                const overallStats = player.overallStats;
+                const surfaceStats = player.surfaceStats;
+                
+                return `
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <h6 class="mb-0">Player ${playerNumber}: ${player.playerName}</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- Overall Stats -->
+                                        <div class="col-md-6">
+                                            <h6 class="text-primary">📊 Overall Statistics</h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong>Total Matches Won:</strong></td>
+                                                            <td class="text-success">${overallStats.totalMatchesWon}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Total Matches Lost:</strong></td>
+                                                            <td class="text-danger">${overallStats.totalMatchesLost}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Win Rate:</strong></td>
+                                                            <td class="text-primary">${(overallStats.winRate * 100).toFixed(1)}%</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Total Titles:</strong></td>
+                                                            <td class="text-warning">${overallStats.totalTitles}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Surface Stats -->
+                                        <div class="col-md-6">
+                                            <h6 class="text-primary">🏟️ Surface Performance</h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong>Hard Court:</strong></td>
+                                                            <td>${surfaceStats.hard.won}W - ${surfaceStats.hard.lost}L (${(surfaceStats.hard.winRate * 100).toFixed(1)}%)</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Clay Court:</strong></td>
+                                                            <td>${surfaceStats.clay.won}W - ${surfaceStats.clay.lost}L (${(surfaceStats.clay.winRate * 100).toFixed(1)}%)</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Grass Court:</strong></td>
+                                                            <td>${surfaceStats.grass.won}W - ${surfaceStats.grass.lost}L (${(surfaceStats.grass.winRate * 100).toFixed(1)}%)</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }
         });
     </script>

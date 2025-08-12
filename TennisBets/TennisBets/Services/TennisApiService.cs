@@ -70,5 +70,34 @@ namespace TennisBets.Services
                 return new PlayerResponse();
             }
         }
+
+        public async Task<PlayerStats> GetPlayerDetailedStatsAsync(long playerKey)
+        {
+            try
+            {
+                var url = $"{_baseUrl}?method=get_players&player_key={playerKey}&APIkey={_apiKey}";
+                Console.WriteLine($"Calling Player Stats API: {url}");
+                
+                var response = await _httpClient.GetStringAsync(url);
+                Console.WriteLine($"Player Stats API Response received: {response.Length} characters");
+                Console.WriteLine($"Raw API Response: {response}");
+                
+                // Önce PlayerStatsResponse olarak deserialize et
+                var responseWrapper = JsonSerializer.Deserialize<PlayerStatsResponse>(response);
+                Console.WriteLine($"Response wrapper deserialized: Success={responseWrapper?.Success}, Result count={responseWrapper?.Result?.Count ?? 0}");
+                
+                // İlk oyuncuyu al (genellikle tek oyuncu döner)
+                var result = responseWrapper?.Result?.FirstOrDefault() ?? new PlayerStats();
+                Console.WriteLine($"Player Stats extracted: PlayerKey={result.PlayerKey}, PlayerName={result.PlayerName}, Stats count={result.Stats?.Count ?? 0}");
+                
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching player detailed stats: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                return new PlayerStats();
+            }
+        }
     }
 }

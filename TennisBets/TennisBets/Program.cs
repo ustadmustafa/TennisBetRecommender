@@ -17,6 +17,9 @@ builder.Services.AddScoped<ITennisApiService, TennisApiService>();
 // Add Betting Prediction Service
 builder.Services.AddScoped<IBettingPredictionService, BettingPredictionService>();
 
+// Add Player Analysis Service
+builder.Services.AddScoped<IPlayerAnalysisService, PlayerAnalysisService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

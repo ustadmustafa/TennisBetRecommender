@@ -8,11 +8,13 @@ namespace TennisBets.Controllers
     {
         private readonly ITennisService _tennisService;
         private readonly IBettingPredictionService _bettingPredictionService;
+        private readonly IPlayerAnalysisService _playerAnalysisService;
 
-        public TennisController(ITennisService tennisService, IBettingPredictionService bettingPredictionService)
+        public TennisController(ITennisService tennisService, IBettingPredictionService bettingPredictionService, IPlayerAnalysisService playerAnalysisService)
         {
             _tennisService = tennisService;
             _bettingPredictionService = bettingPredictionService;
+            _playerAnalysisService = playerAnalysisService;
         }
 
         public async Task<IActionResult> Index()
@@ -92,6 +94,22 @@ namespace TennisBets.Controllers
             }
         }
 
+        // Oyuncu analiz endpoint'i
+        [HttpGet]
+        public async Task<IActionResult> GetPlayerAnalysis(long player1Key, long player2Key)
+        {
+            try
+            {
+                var matchAnalysis = await _playerAnalysisService.AnalyzeMatchAsync(player1Key, player2Key);
+                return Json(new { success = true, data = matchAnalysis });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetPlayerAnalysis: {ex.Message}");
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
         // Test endpoint'i - API'nin çalışıp çalışmadığını kontrol etmek için
         [HttpGet]
         public async Task<IActionResult> TestApi()
@@ -100,6 +118,44 @@ namespace TennisBets.Controllers
             {
                 var h2hResponse = await _bettingPredictionService.AnalyzeH2HAsync(30, 67747); // Test oyuncuları
                 return Json(new { success = true, message = "API test successful", data = h2hResponse });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message, stackTrace = ex.StackTrace });
+            }
+        }
+
+        // Test endpoint'i - Player Stats API'sini test etmek için
+        [HttpGet]
+        public async Task<IActionResult> TestPlayerStatsApi(long playerKey = 137)
+        {
+            try
+            {
+                var playerStats = await _playerAnalysisService.AnalyzePlayerAsync(playerKey);
+                return Json(new { success = true, message = "Player Stats API test successful", data = playerStats });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message, stackTrace = ex.StackTrace });
+            }
+        }
+
+        // Debug endpoint'i - Raw API response'unu görmek için
+        [HttpGet]
+        public async Task<IActionResult> DebugPlayerStatsApi(long playerKey = 137)
+        {
+            try
+            {
+                var url = $"https://api.api-tennis.com/tennis/?method=get_players&player_key={playerKey}&APIkey=a8a78ad99e8bc0623fb22b8ae906133c12361eae083008375af2a362aaa3cb31";
+                using var httpClient = new HttpClient();
+                var response = await httpClient.GetStringAsync(url);
+                
+                return Json(new { 
+                    success = true, 
+                    message = "Raw API response captured", 
+                    responseLength = response.Length,
+                    rawResponse = response
+                });
             }
             catch (Exception ex)
             {
