@@ -206,6 +206,9 @@
             }
 
             function displayPlayerAnalysis(analysis) {
+                console.log('Full analysis data:', analysis);
+                console.log('H2H Analysis data:', analysis.h2hAnalysis);
+                
                 let html = `
                     <div class="row mb-3">
                         <div class="col-12">
@@ -221,6 +224,9 @@
                 
                 // Player 2 Analysis
                 html += createPlayerAnalysisCard(analysis.player2, 2);
+
+                // H2H Analysis - Her zaman göster
+                html += createH2HAnalysisCard(analysis.h2hAnalysis || {}, analysis.player1Name, analysis.player2Name);
 
                 $('#playerAnalysisContent').html(html);
             }
@@ -325,6 +331,117 @@
                         </div>
                     </div>
                 `;
+            }
+
+            function createH2HAnalysisCard(h2hAnalysis, player1Name, player2Name) {
+                console.log('Creating H2H card with data:', h2hAnalysis);
+                
+                let html = `
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">⚔️ Head-to-Head Analysis</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- H2H Matches -->
+                                        <div class="col-md-4">
+                                            <h6 class="text-success">🤝 Direct Matches</h6>
+                                            ${h2hAnalysis.headToHeadMatches && h2hAnalysis.headToHeadMatches.length > 0 ? 
+                                                `<div class="table-responsive">
+                                                    <table class="table table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>Result</th>
+                                                                <th>Winner</th>
+                                                                <th>Tournament</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            ${h2hAnalysis.headToHeadMatches.map(match => `
+                                                                <tr>
+                                                                    <td>${match.eventDate}</td>
+                                                                    <td>${match.eventFinalResult}</td>
+                                                                    <td class="text-success">${match.winner}</td>
+                                                                    <td><small>${match.tournamentName}</small></td>
+                                                                </tr>
+                                                            `).join('')}
+                                                        </tbody>
+                                                    </table>
+                                                </div>` : 
+                                                '<p class="text-muted">No direct matches found between these players.</p>'
+                                            }
+                                        </div>
+                                        
+                                        <!-- Player 1 Recent Matches -->
+                                        <div class="col-md-4">
+                                            <h6 class="text-primary">📊 ${player1Name} - Last 10 Matches</h6>
+                                            ${h2hAnalysis.player1RecentMatches && h2hAnalysis.player1RecentMatches.length > 0 ? 
+                                                `<div class="table-responsive">
+                                                    <table class="table table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>Opponent</th>
+                                                                <th>Result</th>
+                                                                <th>Winner</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            ${h2hAnalysis.player1RecentMatches.map(match => `
+                                                                <tr>
+                                                                    <td>${match.eventDate}</td>
+                                                                    <td>${match.eventSecondPlayer}</td>
+                                                                    <td>${match.eventFinalResult}</td>
+                                                                    <td class="${match.winner === player1Name ? 'text-success' : 'text-danger'}">${match.winner}</td>
+                                                                </tr>
+                                                            `).join('')}
+                                                        </tbody>
+                                                    </table>
+                                                </div>` : 
+                                                '<p class="text-muted">No recent matches found for this player.</p>'
+                                            }
+                                        </div>
+
+                                        <!-- Player 2 Recent Matches -->
+                                        <div class="col-md-4">
+                                            <h6 class="text-primary">📊 ${player2Name} - Last 10 Matches</h6>
+                                            ${h2hAnalysis.player2RecentMatches && h2hAnalysis.player2RecentMatches.length > 0 ? 
+                                                `<div class="table-responsive">
+                                                    <table class="table table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>Opponent</th>
+                                                                <th>Result</th>
+                                                                <th>Winner</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            ${h2hAnalysis.player2RecentMatches.map(match => `
+                                                                <tr>
+                                                                    <td>${match.eventDate}</td>
+                                                                    <td>${match.eventSecondPlayer}</td>
+                                                                    <td>${match.eventFinalResult}</td>
+                                                                    <td class="${match.winner === player2Name ? 'text-success' : 'text-danger'}">${match.winner}</td>
+                                                                </tr>
+                                                            `).join('')}
+                                                        </tbody>
+                                                    </table>
+                                                </div>` : 
+                                                '<p class="text-muted">No recent matches found for this player.</p>'
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                return html;
             }
         });
     </script>

@@ -32,14 +32,29 @@ namespace TennisBets.Models
         [JsonPropertyName("event_date")]
         public string EventDate { get; set; } = string.Empty;
 
+        [JsonPropertyName("event_time")]
+        public string EventTime { get; set; } = string.Empty;
+
         [JsonPropertyName("event_first_player")]
         public string EventFirstPlayer { get; set; } = string.Empty;
+
+        [JsonPropertyName("first_player_key")]
+        public long FirstPlayerKey { get; set; }
 
         [JsonPropertyName("event_second_player")]
         public string EventSecondPlayer { get; set; } = string.Empty;
 
+        [JsonPropertyName("second_player_key")]
+        public long SecondPlayerKey { get; set; }
+
         [JsonPropertyName("event_final_result")]
         public string EventFinalResult { get; set; } = string.Empty;
+
+        [JsonPropertyName("event_game_result")]
+        public string EventGameResult { get; set; } = string.Empty;
+
+        [JsonPropertyName("event_serve")]
+        public string? EventServe { get; set; }
 
         [JsonPropertyName("event_winner")]
         public string EventWinner { get; set; } = string.Empty;
@@ -47,11 +62,32 @@ namespace TennisBets.Models
         [JsonPropertyName("event_status")]
         public string EventStatus { get; set; } = string.Empty;
 
+        [JsonPropertyName("event_type_type")]
+        public string EventTypeType { get; set; } = string.Empty;
+
         [JsonPropertyName("tournament_name")]
         public string TournamentName { get; set; } = string.Empty;
 
+        [JsonPropertyName("tournament_key")]
+        public long TournamentKey { get; set; }
+
         [JsonPropertyName("tournament_round")]
         public string TournamentRound { get; set; } = string.Empty;
+
+        [JsonPropertyName("tournament_season")]
+        public string TournamentSeason { get; set; } = string.Empty;
+
+        [JsonPropertyName("event_live")]
+        public string EventLive { get; set; } = string.Empty;
+
+        [JsonPropertyName("event_first_player_logo")]
+        public string? EventFirstPlayerLogo { get; set; }
+
+        [JsonPropertyName("event_second_player_logo")]
+        public string? EventSecondPlayerLogo { get; set; }
+
+        [JsonPropertyName("event_qualification")]
+        public string EventQualification { get; set; } = string.Empty;
     }
 
     public class PlayerResult
@@ -62,17 +98,65 @@ namespace TennisBets.Models
         [JsonPropertyName("event_date")]
         public string EventDate { get; set; } = string.Empty;
 
-        [JsonPropertyName("event_opponent")]
-        public string EventOpponent { get; set; } = string.Empty;
+        [JsonPropertyName("event_time")]
+        public string EventTime { get; set; } = string.Empty;
+
+        [JsonPropertyName("event_first_player")]
+        public string EventFirstPlayer { get; set; } = string.Empty;
+
+        [JsonPropertyName("first_player_key")]
+        public long FirstPlayerKey { get; set; }
+
+        [JsonPropertyName("event_second_player")]
+        public string EventSecondPlayer { get; set; } = string.Empty;
+
+        [JsonPropertyName("second_player_key")]
+        public long SecondPlayerKey { get; set; }
 
         [JsonPropertyName("event_final_result")]
         public string EventFinalResult { get; set; } = string.Empty;
+
+        [JsonPropertyName("event_game_result")]
+        public string EventGameResult { get; set; } = string.Empty;
+
+        [JsonPropertyName("event_serve")]
+        public string? EventServe { get; set; }
 
         [JsonPropertyName("event_winner")]
         public string EventWinner { get; set; } = string.Empty;
 
         [JsonPropertyName("event_status")]
         public string EventStatus { get; set; } = string.Empty;
+
+        [JsonPropertyName("event_type_type")]
+        public string EventTypeType { get; set; } = string.Empty;
+
+        [JsonPropertyName("tournament_name")]
+        public string TournamentName { get; set; } = string.Empty;
+
+        [JsonPropertyName("tournament_key")]
+        public long TournamentKey { get; set; }
+
+        [JsonPropertyName("tournament_round")]
+        public string TournamentRound { get; set; } = string.Empty;
+
+        [JsonPropertyName("tournament_season")]
+        public string TournamentSeason { get; set; } = string.Empty;
+
+        [JsonPropertyName("event_live")]
+        public string EventLive { get; set; } = string.Empty;
+
+        [JsonPropertyName("event_first_player_logo")]
+        public string? EventFirstPlayerLogo { get; set; }
+
+        [JsonPropertyName("event_second_player_logo")]
+        public string? EventSecondPlayerLogo { get; set; }
+
+        [JsonPropertyName("event_qualification")]
+        public string EventQualification { get; set; } = string.Empty;
+
+        // Convenience property for opponent
+        public string EventOpponent => EventSecondPlayer;
     }
 
     // Standings API Response Models

@@ -17,11 +17,13 @@ namespace TennisBets.Services
             {
                 var player1Analysis = await AnalyzePlayerAsync(player1Key);
                 var player2Analysis = await AnalyzePlayerAsync(player2Key);
+                var h2hAnalysis = await GetH2HAnalysisAsync(player1Key, player2Key);
 
                 return new MatchAnalysis
                 {
                     Player1 = player1Analysis,
-                    Player2 = player2Analysis
+                    Player2 = player2Analysis,
+                    H2HAnalysis = h2hAnalysis
                 };
             }
             catch (Exception ex)
@@ -61,6 +63,122 @@ namespace TennisBets.Services
             {
                 Console.WriteLine($"Error analyzing player {playerKey}: {ex.Message}");
                 throw;
+            }
+        }
+
+        private async Task<H2HAnalysisData> GetH2HAnalysisAsync(long player1Key, long player2Key)
+        {
+            try
+            {
+                Console.WriteLine($"Getting H2H analysis for players: {player1Key} vs {player2Key}");
+                var h2hResponse = await _tennisApiService.GetH2HAsync(player1Key, player2Key);
+                Console.WriteLine($"H2H API Response received: Success={h2hResponse?.Success}");
+                Console.WriteLine($"H2H Response Result: H2H count={h2hResponse?.Result?.H2H?.Count ?? 0}, FirstPlayerResults count={h2hResponse?.Result?.FirstPlayerResults?.Count ?? 0}, SecondPlayerResults count={h2hResponse?.Result?.SecondPlayerResults?.Count ?? 0}");
+                
+                var h2hAnalysis = new H2HAnalysisData();
+
+                // H2H maçlarını işle
+                if (h2hResponse?.Result?.H2H != null)
+                {
+                    Console.WriteLine($"Processing {h2hResponse.Result.H2H.Count} H2H matches");
+                    foreach (var match in h2hResponse.Result.H2H)
+                    {
+                        var h2hMatch = new H2HMatchData
+                        {
+                            EventDate = match.EventDate,
+                            EventFinalResult = match.EventFinalResult,
+                            Winner = GetWinnerName(match.EventWinner, match.EventFirstPlayer, match.EventSecondPlayer),
+                            TournamentName = match.TournamentName,
+                            TournamentRound = match.TournamentRound,
+                            EventTypeType = match.EventTypeType
+                        };
+                        h2hAnalysis.HeadToHeadMatches.Add(h2hMatch);
+                        Console.WriteLine($"Added H2H match: {match.EventDate} - {match.EventFirstPlayer} vs {match.EventSecondPlayer} - Winner: {h2hMatch.Winner}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No H2H matches found in response");
+                }
+
+                // Player1'in son maçlarını işle (son 10 maç)
+                if (h2hResponse?.Result?.FirstPlayerResults != null)
+                {
+                    Console.WriteLine($"Processing {h2hResponse.Result.FirstPlayerResults.Count} first player results");
+                    var recentMatches = h2hResponse.Result.FirstPlayerResults.Take(10);
+                    foreach (var match in recentMatches)
+                    {
+                        var recentMatch = new PlayerRecentMatchData
+                        {
+                            EventDate = match.EventDate,
+                            EventFirstPlayer = match.EventFirstPlayer,
+                            EventSecondPlayer = match.EventSecondPlayer,
+                            EventFinalResult = match.EventFinalResult,
+                            Winner = GetWinnerName(match.EventWinner, match.EventFirstPlayer, match.EventSecondPlayer),
+                            TournamentName = match.TournamentName,
+                            TournamentRound = match.TournamentRound,
+                            EventTypeType = match.EventTypeType
+                        };
+                        h2hAnalysis.Player1RecentMatches.Add(recentMatch);
+                        Console.WriteLine($"Added Player1 recent match: {match.EventDate} - {match.EventFirstPlayer} vs {match.EventSecondPlayer} - Winner: {recentMatch.Winner}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No first player results found in response");
+                }
+
+                // Player2'nin son maçlarını işle (son 10 maç)
+                if (h2hResponse?.Result?.SecondPlayerResults != null)
+                {
+                    Console.WriteLine($"Processing {h2hResponse.Result.SecondPlayerResults.Count} second player results");
+                    var recentMatches = h2hResponse.Result.SecondPlayerResults.Take(10);
+                    foreach (var match in recentMatches)
+                    {
+                        var recentMatch = new PlayerRecentMatchData
+                        {
+                            EventDate = match.EventDate,
+                            EventFirstPlayer = match.EventFirstPlayer,
+                            EventSecondPlayer = match.EventSecondPlayer,
+                            EventFinalResult = match.EventFinalResult,
+                            Winner = GetWinnerName(match.EventWinner, match.EventFirstPlayer, match.EventSecondPlayer),
+                            TournamentName = match.TournamentName,
+                            TournamentRound = match.TournamentRound,
+                            EventTypeType = match.EventTypeType
+                        };
+                        h2hAnalysis.Player2RecentMatches.Add(recentMatch);
+                        Console.WriteLine($"Added Player2 recent match: {match.EventDate} - {match.EventFirstPlayer} vs {match.EventSecondPlayer} - Winner: {recentMatch.Winner}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No second player results found in response");
+                }
+
+                Console.WriteLine($"Final H2H Analysis: H2H={h2hAnalysis.HeadToHeadMatches.Count}, Player1Recent={h2hAnalysis.Player1RecentMatches.Count}, Player2Recent={h2hAnalysis.Player2RecentMatches.Count}");
+                return h2hAnalysis;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting H2H analysis: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                return new H2HAnalysisData();
+            }
+        }
+
+        private string GetWinnerName(string eventWinner, string firstPlayer, string secondPlayer)
+        {
+            if (string.IsNullOrEmpty(eventWinner))
+                return "Unknown";
+
+            switch (eventWinner.ToLower())
+            {
+                case "first player":
+                    return firstPlayer;
+                case "second player":
+                    return secondPlayer;
+                default:
+                    return eventWinner;
             }
         }
 

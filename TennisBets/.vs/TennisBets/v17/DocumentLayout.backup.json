@@ -7,16 +7,20 @@
       "RelativeMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|solutionrelative:tennisbets\\services\\playeranalysisservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|c:\\users\\mustafa.albayrak\\desktop\\tbr\\tennisbetrecommender\\tennisbets\\tennisbets\\models\\playerstats.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|solutionrelative:tennisbets\\models\\playerstats.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|c:\\users\\mustafa.albayrak\\desktop\\tbr\\tennisbetrecommender\\tennisbets\\tennisbets\\controllers\\tenniscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|solutionrelative:tennisbets\\controllers\\tenniscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|c:\\users\\mustafa.albayrak\\desktop\\tbr\\tennisbetrecommender\\tennisbets\\tennisbets\\services\\tennisapiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|solutionrelative:tennisbets\\services\\tennisapiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|c:\\users\\mustafa.albayrak\\desktop\\tbr\\tennisbetrecommender\\tennisbets\\tennisbets\\services\\tennisservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|solutionrelative:tennisbets\\services\\tennisservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|c:\\users\\mustafa.albayrak\\desktop\\tbr\\tennisbetrecommender\\tennisbets\\tennisbets\\controllers\\tenniscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|solutionrelative:tennisbets\\controllers\\tenniscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{197D4984-F6DD-447E-BA80-0FFAFC4B0AA4}|TennisBets\\TennisBets.csproj|c:\\users\\mustafa.albayrak\\desktop\\tbr\\tennisbetrecommender\\tennisbets\\tennisbets\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -42,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -63,6 +67,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "PlayerStats.cs",
+              "DocumentMoniker": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\Models\\PlayerStats.cs",
+              "RelativeDocumentMoniker": "TennisBets\\Models\\PlayerStats.cs",
+              "ToolTip": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\Models\\PlayerStats.cs",
+              "RelativeToolTip": "TennisBets\\Models\\PlayerStats.cs",
+              "ViewState": "AgIAAJYAAAAAAAAAAAAkwJsAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-13T08:15:02.672Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "TennisApiService.cs",
               "DocumentMoniker": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\Services\\TennisApiService.cs",
               "RelativeDocumentMoniker": "TennisBets\\Services\\TennisApiService.cs",
@@ -70,12 +87,11 @@
               "RelativeToolTip": "TennisBets\\Services\\TennisApiService.cs",
               "ViewState": "AgIAABgAAAAAAAAAAAAowCIAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T07:25:29.251Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-13T07:25:29.251Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "TennisService.cs",
               "DocumentMoniker": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\Services\\TennisService.cs",
               "RelativeDocumentMoniker": "TennisBets\\Services\\TennisService.cs",
@@ -93,14 +109,14 @@
               "RelativeDocumentMoniker": "TennisBets\\Services\\PlayerAnalysisService.cs",
               "ToolTip": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\Services\\PlayerAnalysisService.cs",
               "RelativeToolTip": "TennisBets\\Services\\PlayerAnalysisService.cs",
-              "ViewState": "AgIAADkAAAAAAAAAAAAkwEMAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAJAAAAAAAAAAAAAkwJ4AAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-12T19:53:59.885Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\Views\\Tennis\\Index.cshtml",
               "RelativeDocumentMoniker": "TennisBets\\Views\\Tennis\\Index.cshtml",
@@ -112,7 +128,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "TennisBets\\Views\\Home\\Index.cshtml",
@@ -124,7 +140,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\appsettings.json",
               "RelativeDocumentMoniker": "TennisBets\\appsettings.json",
@@ -136,19 +152,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "TennisController.cs",
               "DocumentMoniker": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\Controllers\\TennisController.cs",
               "RelativeDocumentMoniker": "TennisBets\\Controllers\\TennisController.cs",
               "ToolTip": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\Controllers\\TennisController.cs",
               "RelativeToolTip": "TennisBets\\Controllers\\TennisController.cs",
-              "ViewState": "AgIAAFsAAAAAAAAAAAAgwG4AAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAkwHsAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-11T11:57:35.96Z"
+              "WhenOpened": "2025-08-11T11:57:35.96Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\mustafa.albayrak\\Desktop\\TBR\\TennisBetRecommender\\TennisBets\\TennisBets\\Program.cs",
               "RelativeDocumentMoniker": "TennisBets\\Program.cs",

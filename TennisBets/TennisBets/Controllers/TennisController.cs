@@ -100,12 +100,25 @@ namespace TennisBets.Controllers
         {
             try
             {
+                Console.WriteLine($"GetPlayerAnalysis called for players: {player1Key} vs {player2Key}");
                 var matchAnalysis = await _playerAnalysisService.AnalyzeMatchAsync(player1Key, player2Key);
-                return Json(new { success = true, data = matchAnalysis });
+                
+                Console.WriteLine($"MatchAnalysis created successfully:");
+                Console.WriteLine($"- Player1: {matchAnalysis.Player1?.PlayerName} (Key: {matchAnalysis.Player1?.PlayerKey})");
+                Console.WriteLine($"- Player2: {matchAnalysis.Player2?.PlayerName} (Key: {matchAnalysis.Player2?.PlayerKey})");
+                Console.WriteLine($"- H2H Analysis: {matchAnalysis.H2HAnalysis != null}");
+                Console.WriteLine($"- H2H HeadToHeadMatches count: {matchAnalysis.H2HAnalysis?.HeadToHeadMatches?.Count ?? 0}");
+                Console.WriteLine($"- H2H Player1RecentMatches count: {matchAnalysis.H2HAnalysis?.Player1RecentMatches?.Count ?? 0}");
+                Console.WriteLine($"- H2H Player2RecentMatches count: {matchAnalysis.H2HAnalysis?.Player2RecentMatches?.Count ?? 0}");
+                
+                var jsonResult = Json(new { success = true, data = matchAnalysis });
+                Console.WriteLine($"JSON response created, returning to client");
+                return jsonResult;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in GetPlayerAnalysis: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
                 return Json(new { success = false, message = ex.Message });
             }
         }
