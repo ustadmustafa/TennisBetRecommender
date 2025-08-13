@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using TennisBets.Models;
 
 namespace TennisBets.Services
@@ -27,10 +28,24 @@ namespace TennisBets.Services
                 var response = await _httpClient.GetStringAsync(url);
                 Console.WriteLine($"H2H API Response received: {response.Length} characters");
                 
-                var result = JsonSerializer.Deserialize<H2HResponse>(response) ?? new H2HResponse();
+                // JSON deserialization options ile hata toleransı ekle
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                };
+                
+                var result = JsonSerializer.Deserialize<H2HResponse>(response, options) ?? new H2HResponse();
                 Console.WriteLine($"H2H API deserialized: {result.Result?.H2H?.Count ?? 0} matches found");
                 
                 return result;
+            }
+            catch (JsonException jsonEx)
+            {
+                Console.WriteLine($"JSON Error fetching H2H data: {jsonEx.Message}");
+                Console.WriteLine($"JSON Path: {jsonEx.Path}, Line: {jsonEx.LineNumber}");
+                return new H2HResponse();
             }
             catch (Exception ex)
             {
@@ -46,8 +61,29 @@ namespace TennisBets.Services
             try
             {
                 var url = $"{_baseUrl}?method=get_standings&event_type={eventType}&APIkey={_apiKey}";
+                Console.WriteLine($"Calling Standings API: {url}");
+                
                 var response = await _httpClient.GetStringAsync(url);
-                return JsonSerializer.Deserialize<StandingsResponse>(response) ?? new StandingsResponse();
+                Console.WriteLine($"Standings API Response received: {response.Length} characters");
+                
+                // JSON deserialization options ile hata toleransı ekle
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                };
+                
+                var result = JsonSerializer.Deserialize<StandingsResponse>(response, options) ?? new StandingsResponse();
+                Console.WriteLine($"Standings API deserialized: {result.Result?.Count ?? 0} players found");
+                
+                return result;
+            }
+            catch (JsonException jsonEx)
+            {
+                Console.WriteLine($"JSON Error fetching standings data: {jsonEx.Message}");
+                Console.WriteLine($"JSON Path: {jsonEx.Path}, Line: {jsonEx.LineNumber}");
+                return new StandingsResponse();
             }
             catch (Exception ex)
             {
@@ -62,7 +98,22 @@ namespace TennisBets.Services
             {
                 var url = $"{_baseUrl}?method=get_players&player_key={playerKey}&APIkey={_apiKey}";
                 var response = await _httpClient.GetStringAsync(url);
-                return JsonSerializer.Deserialize<PlayerResponse>(response) ?? new PlayerResponse();
+                
+                // JSON deserialization options ile hata toleransı ekle
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                };
+                
+                return JsonSerializer.Deserialize<PlayerResponse>(response, options) ?? new PlayerResponse();
+            }
+            catch (JsonException jsonEx)
+            {
+                Console.WriteLine($"JSON Error fetching player stats: {jsonEx.Message}");
+                Console.WriteLine($"JSON Path: {jsonEx.Path}, Line: {jsonEx.LineNumber}");
+                return new PlayerResponse();
             }
             catch (Exception ex)
             {
@@ -82,8 +133,16 @@ namespace TennisBets.Services
                 Console.WriteLine($"Player Stats API Response received: {response.Length} characters");
                 Console.WriteLine($"Raw API Response: {response}");
                 
+                // JSON deserialization options ile hata toleransı ekle
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                };
+                
                 // Önce PlayerStatsResponse olarak deserialize et
-                var responseWrapper = JsonSerializer.Deserialize<PlayerStatsResponse>(response);
+                var responseWrapper = JsonSerializer.Deserialize<PlayerStatsResponse>(response, options);
                 Console.WriteLine($"Response wrapper deserialized: Success={responseWrapper?.Success}, Result count={responseWrapper?.Result?.Count ?? 0}");
                 
                 // İlk oyuncuyu al (genellikle tek oyuncu döner)
@@ -91,6 +150,12 @@ namespace TennisBets.Services
                 Console.WriteLine($"Player Stats extracted: PlayerKey={result.PlayerKey}, PlayerName={result.PlayerName}, Stats count={result.Stats?.Count ?? 0}");
                 
                 return result;
+            }
+            catch (JsonException jsonEx)
+            {
+                Console.WriteLine($"JSON Error fetching player detailed stats: {jsonEx.Message}");
+                Console.WriteLine($"JSON Path: {jsonEx.Path}, Line: {jsonEx.LineNumber}");
+                return new PlayerStats();
             }
             catch (Exception ex)
             {

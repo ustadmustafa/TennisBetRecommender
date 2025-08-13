@@ -51,7 +51,8 @@ namespace TennisBets.Services
                     PlayerKey = playerKey,
                     PlayerName = playerStats.PlayerName,
                     OverallStats = CalculateOverallStats(playerStats.Stats),
-                    SurfaceStats = CalculateSurfaceStats(playerStats.Stats)
+                    SurfaceStats = CalculateSurfaceStats(playerStats.Stats),
+                    RankingInfo = await GetPlayerRankingInfoAsync(playerKey)
                 };
 
                 return analysis;
@@ -60,6 +61,44 @@ namespace TennisBets.Services
             {
                 Console.WriteLine($"Error analyzing player {playerKey}: {ex.Message}");
                 throw;
+            }
+        }
+
+        private async Task<RankingInfo> GetPlayerRankingInfoAsync(long playerKey)
+        {
+            try
+            {
+                var rankingInfo = new RankingInfo();
+
+                // ATP sıralamasını kontrol et
+                var atpStandings = await _tennisApiService.GetStandingsAsync("ATP");
+                var atpPlayer = atpStandings?.Result?.FirstOrDefault(p => p.PlayerKey.HasValue && p.PlayerKey.Value == playerKey);
+                if (atpPlayer != null)
+                {
+                    rankingInfo.ATPRanking = atpPlayer.Place;
+                    rankingInfo.ATPPoints = atpPlayer.Points;
+                    rankingInfo.CurrentLeague = "ATP";
+                }
+
+                // WTA sıralamasını kontrol et
+                var wtaStandings = await _tennisApiService.GetStandingsAsync("WTA");
+                var wtaPlayer = wtaStandings?.Result?.FirstOrDefault(p => p.PlayerKey.HasValue && p.PlayerKey.Value == playerKey);
+                if (wtaPlayer != null)
+                {
+                    rankingInfo.WTARanking = wtaPlayer.Place;
+                    rankingInfo.WTAPoints = wtaPlayer.Points;
+                    if (string.IsNullOrEmpty(rankingInfo.CurrentLeague))
+                    {
+                        rankingInfo.CurrentLeague = "WTA";
+                    }
+                }
+
+                return rankingInfo;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting ranking info for player {playerKey}: {ex.Message}");
+                return new RankingInfo();
             }
         }
 

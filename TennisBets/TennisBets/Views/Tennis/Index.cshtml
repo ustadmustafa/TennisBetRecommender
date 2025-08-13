@@ -386,9 +386,9 @@
             }
 
             function createPlayerAnalysisCard(player, playerNumber) {
-                const playerName = playerNumber === 1 ? 'player1Name' : 'player2Name';
                 const overallStats = player.overallStats;
                 const surfaceStats = player.surfaceStats;
+                const rankingInfo = player.rankingInfo;
                 
                 return `
                     <div class="row mb-4">
@@ -400,7 +400,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <!-- Overall Stats -->
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <h6 class="text-primary">📊 Overall Statistics</h6>
                                             <div class="table-responsive">
                                                 <table class="table table-sm">
@@ -427,7 +427,7 @@
                                         </div>
                                         
                                         <!-- Surface Stats -->
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <h6 class="text-primary">🏟️ Surface Performance</h6>
                                             <div class="table-responsive">
                                                 <table class="table table-sm">
@@ -443,6 +443,37 @@
                                                         <tr>
                                                             <td><strong>Grass Court:</strong></td>
                                                             <td>${surfaceStats.grass.won}W - ${surfaceStats.grass.lost}L (${(surfaceStats.grass.winRate * 100).toFixed(1)}%)</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- Ranking Info -->
+                                        <div class="col-md-4">
+                                            <h6 class="text-primary">🏆 World Rankings</h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong>ATP Ranking:</strong></td>
+                                                            <td class="text-info">${rankingInfo.atpRanking}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>ATP Points:</strong></td>
+                                                            <td class="text-info">${rankingInfo.atpPoints}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>WTA Ranking:</strong></td>
+                                                            <td class="text-info">${rankingInfo.wtaRanking}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>WTA Points:</strong></td>
+                                                            <td class="text-info">${rankingInfo.wtaPoints}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Current League:</strong></td>
+                                                            <td class="text-warning">${rankingInfo.currentLeague}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

@@ -94,10 +94,16 @@ namespace TennisBets.Models
         public string Player { get; set; } = string.Empty;
 
         [JsonPropertyName("player_key")]
-        public long PlayerKey { get; set; }
+        public long? PlayerKey { get; set; }
 
         [JsonPropertyName("league")]
         public string League { get; set; } = string.Empty;
+
+        [JsonPropertyName("movement")]
+        public string Movement { get; set; } = string.Empty;
+
+        [JsonPropertyName("country")]
+        public string Country { get; set; } = string.Empty;
 
         [JsonPropertyName("points")]
         public string Points { get; set; } = string.Empty;

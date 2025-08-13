@@ -72,6 +72,7 @@ namespace TennisBets.Models
         public string PlayerName { get; set; } = string.Empty;
         public OverallStats OverallStats { get; set; } = new();
         public SurfaceStats SurfaceStats { get; set; } = new();
+        public RankingInfo RankingInfo { get; set; } = new();
     }
 
     public class OverallStats
@@ -94,6 +95,15 @@ namespace TennisBets.Models
         public int Won { get; set; }
         public int Lost { get; set; }
         public double WinRate { get; set; }
+    }
+
+    public class RankingInfo
+    {
+        public string ATPRanking { get; set; } = "N/A";
+        public string ATPPoints { get; set; } = "N/A";
+        public string WTARanking { get; set; } = "N/A";
+        public string WTAPoints { get; set; } = "N/A";
+        public string CurrentLeague { get; set; } = "N/A";
     }
 
     public class MatchAnalysis
