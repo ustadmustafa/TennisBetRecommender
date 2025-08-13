@@ -39,13 +39,13 @@ namespace TennisBets.Models
         public string EventFirstPlayer { get; set; } = string.Empty;
 
         [JsonPropertyName("first_player_key")]
-        public long FirstPlayerKey { get; set; }
+        public long? FirstPlayerKey { get; set; }
 
         [JsonPropertyName("event_second_player")]
         public string EventSecondPlayer { get; set; } = string.Empty;
 
         [JsonPropertyName("second_player_key")]
-        public long SecondPlayerKey { get; set; }
+        public long? SecondPlayerKey { get; set; }
 
         [JsonPropertyName("event_final_result")]
         public string EventFinalResult { get; set; } = string.Empty;
@@ -105,13 +105,13 @@ namespace TennisBets.Models
         public string EventFirstPlayer { get; set; } = string.Empty;
 
         [JsonPropertyName("first_player_key")]
-        public long FirstPlayerKey { get; set; }
+        public long? FirstPlayerKey { get; set; }
 
         [JsonPropertyName("event_second_player")]
         public string EventSecondPlayer { get; set; } = string.Empty;
 
         [JsonPropertyName("second_player_key")]
-        public long SecondPlayerKey { get; set; }
+        public long? SecondPlayerKey { get; set; }
 
         [JsonPropertyName("event_final_result")]
         public string EventFinalResult { get; set; } = string.Empty;

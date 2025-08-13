@@ -394,7 +394,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>Date</th>
-                                                                <th>Opponent</th>
+                                                                <th>Match</th>
                                                                 <th>Result</th>
                                                                 <th>Winner</th>
                                                             </tr>
@@ -403,7 +403,7 @@
                                                             ${h2hAnalysis.player1RecentMatches.map(match => `
                                                                 <tr>
                                                                     <td>${match.eventDate}</td>
-                                                                    <td>${match.eventSecondPlayer}</td>
+                                                                    <td><strong>${match.eventFirstPlayer}</strong> vs <strong>${match.eventSecondPlayer}</strong></td>
                                                                     <td>${match.eventFinalResult}</td>
                                                                     <td class="${match.winner === player1Name ? 'text-success' : 'text-danger'}">${match.winner}</td>
                                                                 </tr>
@@ -424,7 +424,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>Date</th>
-                                                                <th>Opponent</th>
+                                                                <th>Match</th>
                                                                 <th>Result</th>
                                                                 <th>Winner</th>
                                                             </tr>
@@ -433,7 +433,7 @@
                                                             ${h2hAnalysis.player2RecentMatches.map(match => `
                                                                 <tr>
                                                                     <td>${match.eventDate}</td>
-                                                                    <td>${match.eventSecondPlayer}</td>
+                                                                    <td><strong>${match.eventFirstPlayer}</strong> vs <strong>${match.eventSecondPlayer}</strong></td>
                                                                     <td>${match.eventFinalResult}</td>
                                                                     <td class="${match.winner === player2Name ? 'text-success' : 'text-danger'}">${match.winner}</td>
                                                                 </tr>

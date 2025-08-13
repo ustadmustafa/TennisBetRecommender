@@ -105,8 +105,19 @@ namespace TennisBets.Services
                 if (h2hResponse?.Result?.FirstPlayerResults != null)
                 {
                     Console.WriteLine($"Processing {h2hResponse.Result.FirstPlayerResults.Count} first player results");
-                    var recentMatches = h2hResponse.Result.FirstPlayerResults.Take(10);
-                    foreach (var match in recentMatches)
+                    
+                    // Sadece Player1'in oynadığı maçları filtrele
+                    var player1Matches = h2hResponse.Result.FirstPlayerResults
+                        .Where(match => 
+                            (match.FirstPlayerKey.HasValue && match.FirstPlayerKey.Value == player1Key) ||
+                            (match.SecondPlayerKey.HasValue && match.SecondPlayerKey.Value == player1Key))
+                        .OrderByDescending(match => DateTime.Parse(match.EventDate))
+                        .Take(10)
+                        .ToList();
+                    
+                    Console.WriteLine($"Filtered to {player1Matches.Count} matches where Player1 (Key: {player1Key}) actually played");
+                    
+                    foreach (var match in player1Matches)
                     {
                         var recentMatch = new PlayerRecentMatchData
                         {
@@ -132,8 +143,19 @@ namespace TennisBets.Services
                 if (h2hResponse?.Result?.SecondPlayerResults != null)
                 {
                     Console.WriteLine($"Processing {h2hResponse.Result.SecondPlayerResults.Count} second player results");
-                    var recentMatches = h2hResponse.Result.SecondPlayerResults.Take(10);
-                    foreach (var match in recentMatches)
+                    
+                    // Sadece Player2'nin oynadığı maçları filtrele
+                    var player2Matches = h2hResponse.Result.SecondPlayerResults
+                        .Where(match => 
+                            (match.FirstPlayerKey.HasValue && match.FirstPlayerKey.Value == player2Key) ||
+                            (match.SecondPlayerKey.HasValue && match.SecondPlayerKey.Value == player2Key))
+                        .OrderByDescending(match => DateTime.Parse(match.EventDate))
+                        .Take(10)
+                        .ToList();
+                    
+                    Console.WriteLine($"Filtered to {player2Matches.Count} matches where Player2 (Key: {player2Key}) actually played");
+                    
+                    foreach (var match in player2Matches)
                     {
                         var recentMatch = new PlayerRecentMatchData
                         {
@@ -171,13 +193,25 @@ namespace TennisBets.Services
             if (string.IsNullOrEmpty(eventWinner))
                 return "Unknown";
 
-            switch (eventWinner.ToLower())
+            // API'den gelen event_winner değerini daha iyi yorumla
+            switch (eventWinner.ToLower().Trim())
             {
                 case "first player":
+                case "first":
+                case "1":
                     return firstPlayer;
                 case "second player":
+                case "second":
+                case "2":
                     return secondPlayer;
                 default:
+                    // Eğer event_winner bir oyuncu ismi ise, direkt kullan
+                    if (eventWinner.Equals(firstPlayer, StringComparison.OrdinalIgnoreCase))
+                        return firstPlayer;
+                    if (eventWinner.Equals(secondPlayer, StringComparison.OrdinalIgnoreCase))
+                        return secondPlayer;
+                    
+                    // Bilinmeyen durumda event_winner'ı olduğu gibi döndür
                     return eventWinner;
             }
         }
